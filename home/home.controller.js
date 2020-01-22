@@ -1,6 +1,7 @@
 class HomeCtrl {
   constructor($scope) {
     "ngInject";
+    var title='Puzzle';
     //this.name = "AngularJS";
     var shuffle = function(originalArray) {
       var array = [].concat(originalArray);
@@ -23,7 +24,7 @@ class HomeCtrl {
       return array;
     };
     var array2D = [];
-    var cofigureGrid = function(len) {
+    $scope.cofigureGrid = function(len) {
       let size = len*len;
       var arr1 = [];
       while (arr1.length < size-1) {
@@ -40,39 +41,43 @@ class HomeCtrl {
         }
       }
       console.log("Array Log",array2D);
-      return array2D;
+       rw=len-1;
+       cl=len-1;
+      $scope.arr=array2D;
+      document.getElementById("hideButtons").setAttribute("style","display:none");
     };
+    $scope.reload= function(){
+      window.location.reload();
+    }
     //console.log("Array Log",cofigureGrid(8));
+    var rw=2;
+    var cl=2;
 
 
-
-
-    var arr = [[8, 6, 3], [7, 5, 1], [4, 2, null]];
-    $scope.arr = arr;
+    // var arr = [[8, 6, 3], [7, 5, 1], [4, 2, null]];
+    // $scope.arr = arr;
     var update = function(rw, cl, val, arr) {
       arr[rw][cl] = val;
     };
     // $scope.arr[2][2]=null;
-    var rw = 2;
-    var cl = 2;
 
     document.addEventListener(
       "keydown",
       function(event) {
         if (event.keyCode == 37) {
           // alert('Left was pressed');
-          swapLeft(rw, cl, arr);
+          swapLeft(rw, cl, $scope.arr);
           cl++;
-          if (cl > 2) {
+          if (cl > $scope.arr[0].length-1) {
             alertt();
             cl--;
           }
           //console.log("col=",cl)
         } else if (event.keyCode == 38) {
           //alert('Up was pressed');
-          swapUp(rw, cl);
+          swapUp(rw, cl, $scope.arr);
           rw++;
-          if (rw > 2) {
+          if (rw > $scope.arr[0].length-1) {
             alertt();
             rw--;
           }
@@ -80,7 +85,7 @@ class HomeCtrl {
           //console.log("Inside",$scope.arr);
         } else if (event.keyCode == 39) {
           //alert('Right was pressed');
-          swapRight(rw, cl, arr);
+          swapRight(rw, cl, $scope.arr);
           cl--;
           if (cl < 0) {
             alertt();
@@ -89,7 +94,7 @@ class HomeCtrl {
           //console.log("col=",cl)
         } else if (event.keyCode == 40) {
           //alert('Down was pressed');
-          swapDown(rw, cl, arr);
+          swapDown(rw, cl, $scope.arr);
           rw--;
           if (rw < 0) {
             alertt();
@@ -102,7 +107,7 @@ class HomeCtrl {
     );
 
     var swapLeft = function(rw, cl, arr) {
-      if (cl + 1 != 3) {
+      if (cl + 1 != arr[0].length) {
         let str = "col" + rw + (cl + 1);
         let temp = arr[rw][cl + 1];
         //console.log("Value",temp,str,arr);
@@ -113,8 +118,8 @@ class HomeCtrl {
         update(rw, cl, temp, arr);
       }
     };
-    var swapUp = function(rw, cl) {
-      if (rw + 1 != 3) {
+    var swapUp = function(rw, cl, arr) {
+      if (rw + 1 != arr[0].length) {
         let str = "col" + (rw + 1) + cl;
         let temp = arr[rw + 1][cl];
         //console.log("Value",temp,str,arr);

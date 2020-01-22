@@ -1,20 +1,19 @@
 <h1>Hello {{$ctrl.name}}!</h1>
-<p>
-  Start editing <b>home/home.html</b> :)
-</p>
+<button type="button" class="btn btn-danger" ng-click="reload()">Reloaad</button>
 
-<div id="container-main" ng-model="arr">
-  <div id="row{{$index}}" ng-repeat="item in arr track by $index">
-      <div id="col{{$parent.$index}}{{$index}}" ng-repeat="item1 in item track by $index">{{item1}}</div>
+
+<div id="container" class="card" ng-model="arr">
+  <div id="row" ng-repeat="item in arr track by $index">
+      <div id="col{{$parent.$index}}{{$index}}" ng-repeat="item1 in item track by $index" class="colElem">{{item1}}</div>
   </div>
 </div>
 
 
 <div class="inline-block mt-5">
-<div class="m-auto w-80">
-<button type="button" class="btn btn-primary" ng-click="this.cofigureGrid(3)">Easy</button>
-<button type="button" class="btn btn-secondary" ng-click="this.cofigureGrid(4)">Medium</button>
-<button type="button" class="btn btn-success" ng-click="this.cofigureGrid(5)">Difficult</button>
-<button type="button" class="btn btn-danger" ng-click="this.cofigureGrid()">custome</button>
+<div id="hideButtons" class="m-auto w-80">
+<button type="button" class="btn btn-primary" ng-model="rwcl" ng-click="cofigureGrid(3)">Easy</button>
+<button type="button" class="btn btn-secondary" ng-click="cofigureGrid(4)">Medium</button>
+<button type="button" class="btn btn-success" ng-click="cofigureGrid(5)">Difficult</button>
+<button type="button" class="btn btn-danger" ng-click="cofigureGrid()">custome</button>
 </div>
 <div>

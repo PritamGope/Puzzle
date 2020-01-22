@@ -3,21 +3,21 @@
 h1, p {
   font-family: Lato;
 }
-#container-main{
-  margin: auto
-  ;
-  width: 149px;
-  height:150px;
+#container{
+  margin: auto;
   background-color: lightblue;
   border: 1px solid black;
 }
-#row0>div,#row1>div,#row2>div{
+#row>div{
   width:49px;
   height: 50px;
   border: 1px solid black;
   float: left;
   text-align:center;
-  padding-top: 12px;
+}
+.colElem{
+  top: 25%;
+  position: relative;
 }
 .inline-block{
   display: inline-block;
