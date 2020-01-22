@@ -1,0 +1,20 @@
+<h1>Hello {{$ctrl.name}}!</h1>
+<p>
+  Start editing <b>home/home.html</b> :)
+</p>
+
+<div id="container-main" ng-model="arr">
+  <div id="row{{$index}}" ng-repeat="item in arr track by $index">
+      <div id="col{{$parent.$index}}{{$index}}" ng-repeat="item1 in item track by $index">{{item1}}</div>
+  </div>
+</div>
+
+
+<div class="inline-block mt-5">
+<div class="m-auto w-80">
+<button type="button" class="btn btn-primary">Easy</button>
+<button type="button" class="btn btn-secondary">Medium</button>
+<button type="button" class="btn btn-success">Difficult</button>
+<button type="button" class="btn btn-danger">custome</button>
+</div>
+<div>

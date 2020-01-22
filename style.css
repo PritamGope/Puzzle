@@ -1,0 +1,29 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+h1, p {
+  font-family: Lato;
+}
+#container-main{
+  margin: auto
+  ;
+  width: 149px;
+  height:150px;
+  background-color: lightblue;
+  border: 1px solid black;
+}
+#row0>div,#row1>div,#row2>div{
+  width:49px;
+  height: 50px;
+  border: 1px solid black;
+  float: left;
+  text-align:center;
+  padding-top: 12px;
+}
+.inline-block{
+  display: inline-block;
+  width: 100%;
+}
+.w-80{
+  margin: auto;width: 80%;
+  display: none;
+}
