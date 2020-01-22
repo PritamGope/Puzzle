@@ -22,16 +22,16 @@ class HomeCtrl {
 
       return array;
     };
-    // var cofigureGrid = function(len) {
-    //   let size = len*len;
-    //   var arr1 = [];
-    //   while (arr1.length < size-1) {
-    //     var r = Math.floor(Math.random() * size-1) + 1;
-    //     if (arr1.indexOf(r) === -1 && r!=0) arr1.push(r);
-    //   }
-    //   console.log("Array",arr1);
-    // };
-    // cofigureGrid(4);
+    var cofigureGrid = function(len) {
+      let size = len*len;
+      var arr1 = [];
+      while (arr1.length < size-1) {
+        var r = Math.floor(Math.random() * size-1) + 1;
+        if (arr1.indexOf(r) === -1 && r!=0) arr1.push(r);
+      }
+      console.log("Array",arr1);
+    };
+    cofigureGrid(4);
 
 
 
