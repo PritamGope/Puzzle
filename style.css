@@ -25,5 +25,5 @@ h1, p {
 }
 .w-80{
   margin: auto;width: 80%;
-  display: none;
+  /* display: none; */
 }

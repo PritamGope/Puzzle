@@ -22,6 +22,7 @@ class HomeCtrl {
 
       return array;
     };
+    var array2D = [];
     var cofigureGrid = function(len) {
       let size = len*len;
       var arr1 = [];
@@ -29,9 +30,19 @@ class HomeCtrl {
         var r = Math.floor(Math.random() * size-1) + 1;
         if (arr1.indexOf(r) === -1 && r!=0) arr1.push(r);
       }
-      console.log("Array",arr1);
+      let indx=0;
+      arr1.push(null);
+      for(let i=0;i<len;i++){
+        array2D[i]=[];
+        for(let j=0;j<len;j++)
+        {
+          array2D[i][j]=arr1[indx++];
+        }
+      }
+      console.log("Array Log",array2D);
+      return array2D;
     };
-    cofigureGrid(4);
+    //console.log("Array Log",cofigureGrid(8));
 
 
 
