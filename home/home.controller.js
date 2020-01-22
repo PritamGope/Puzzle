@@ -44,6 +44,8 @@ class HomeCtrl {
       rw = len - 1;
       cl = len - 1;
       $scope.arr = array2D;
+      var cardWidth = "width:" + (len * 50 + 2) + "px";
+      document.getElementById("container").setAttribute("style", cardWidth);
       document
         .getElementById("hideButtons")
         .setAttribute("style", "display:none");
