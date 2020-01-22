@@ -1,19 +1,26 @@
-<h1>Hello {{$ctrl.name}}!</h1>
-<button type="button" class="btn btn-danger" ng-click="reload()">Reloaad</button>
+<h1>Puzzle {{$ctrl.name}}!</h1>
+<button type="button" class="btn btn-danger m-2" ng-click="reload()">Reloaad</button> 
+<div id="inputCstm"> 
+  <form >
+      <label><i>Enter the no of Rows</i></label>
+        <input ng-model="val" placeholder="Enter no. greater than 2" ><button class="ml-1" ng-click="setcofigureGrid(val)" >Punch</button>
+      </div>
+</form>
 
 
-<div id="container" class="card" ng-model="arr">
+<div id="container" class="card m-2" ng-model="arr">
   <div id="row" ng-repeat="item in arr track by $index">
       <div id="col{{$parent.$index}}{{$index}}" ng-repeat="item1 in item track by $index" class="colElem">{{item1}}</div>
   </div>
 </div>
 
 
-<div class="inline-block mt-5">
+<div class="inline-block m-3 ">
 <div id="hideButtons" class="m-auto w-80">
+  <div class="mb-5"><h3>Select Level...</h3></div>
 <button type="button" class="btn btn-primary" ng-model="rwcl" ng-click="cofigureGrid(3)">Easy</button>
 <button type="button" class="btn btn-secondary" ng-click="cofigureGrid(4)">Medium</button>
 <button type="button" class="btn btn-success" ng-click="cofigureGrid(5)">Difficult</button>
-<button type="button" class="btn btn-danger" ng-click="cofigureGrid()">custome</button>
+<button type="button" class="btn btn-danger" ng-click="setcofigureGrid()">Custome</button>
 </div>
 <div>

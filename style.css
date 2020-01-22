@@ -27,3 +27,8 @@ h1, p {
   margin: auto;width: 80%;
   /* display: none; */
 }
+#inputCstm{
+  font-size: 15px;
+  font-weight: 600;
+  display: none;
+}
