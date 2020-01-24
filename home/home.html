@@ -1,8 +1,8 @@
 <div>
 <h1>Puzzle !</h1>
 <button type="button" class="btn btn-danger m-2" ng-click="reload()">Reloaad</button>
-<span class="timer"><span></span>
-  <span ng-model="hour">{{hour}}:</span><span ng-model="min">{{min}}:</span><span ng-model="sec">{{sec}}</span></span>
+<span id="timerCount" class="timer">
+  <span ng-model="hour">{{hour}}:</span><span ng-model="min">{{min}}:</span><span ng-model="sec">{{sec}}</span></span><span id="showTime" class="timer"></span>
 <div id="inputCstm">
 	<form>
 		<label><i>Enter the no of Rows</i></label>
@@ -25,7 +25,7 @@
   <h6>Move Count:-</h6>
   <span ng-model="moves">{{moves}}</span>
 </div>
-  <button type="button" class="btn btn-secondary m-1" ng-click="undoSteps(arr)">Undo</button>
+  <button id="undo" type="button" class="btn btn-secondary m-1" ng-click="undoSteps(arr)">Undo</button>
 </div>
 
 

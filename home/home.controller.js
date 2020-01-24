@@ -1,11 +1,12 @@
 class HomeCtrl {
-  constructor($scope, $interval) {
+  constructor($scope, $interval, $document) {
     "ngInject";
     /*** Initialise Dom Variables and Global Declare Global Variables ***/
     var title = "Puzzle";
     $scope.val;
-    var rw;
-    var cl;
+    var rw = 2;
+    var cl = 2;
+    var isUndo = false;
     $scope.moves = 0;
     $scope.hour = 0; //parseInt('00',8);
     $scope.min = 0;
@@ -117,43 +118,43 @@ class HomeCtrl {
     document.addEventListener(
       "keydown",
       function(event) {
+        //console.log("row col", rw, cl);
         if (event.keyCode == 37) {
-          // alert('Left was pressed');
-          swapLeft(rw, cl, $scope.arr);
-          cl++;
-          if (cl > $scope.arr[0].length - 1) {
+          if (cl == $scope.arr[0].length - 1) {
             alertt();
-            cl--;
+          } else {
+            $scope.moves++;
+            swapLeft(rw, cl, $scope.arr);
+            cl++;
           }
           //console.log("col=",cl)
         } else if (event.keyCode == 38) {
-          //alert('Up was pressed');
-          swapUp(rw, cl, $scope.arr);
-          rw++;
-          if (rw > $scope.arr[0].length - 1) {
+          if (rw == $scope.arr[0].length - 1) {
             alertt();
-            rw--;
+          } else {
+            $scope.moves++;
+            swapUp(rw, cl, $scope.arr);
+            rw++;
           }
           // console.log("row=",rw)
           //console.log("Inside",$scope.arr);
         } else if (event.keyCode == 39) {
-          //alert('Right was pressed');
-          swapRight(rw, cl, $scope.arr);
-          cl--;
-          if (cl < 0) {
+          if (cl == 0) {
             alertt();
-            cl++;
+          } else {
+            $scope.moves++;
+            swapRight(rw, cl, $scope.arr);
+            cl--;
           }
           //console.log("col=",cl)
         } else if (event.keyCode == 40) {
-          //alert('Down was pressed');
-          swapDown(rw, cl, $scope.arr);
-          rw--;
-          if (rw < 0) {
+          if (rw == 0) {
             alertt();
-            rw++;
+          } else {
+            $scope.moves++;
+            swapDown(rw, cl, $scope.arr);
+            rw--;
           }
-          // console.log("row=",rw)
         }
       },
       true
@@ -169,32 +170,34 @@ class HomeCtrl {
         str = "col" + rw + cl;
         document.getElementById(str).innerHTML = temp;
         update(rw, cl, temp, arr);
-        $scope.moves++;
-        if (stepsArray.length < 5) {
+        cl++;
+        if (stepsArray.length < 7 && isUndo == false) {
           stepsArray.push("L");
-        } else {
+        } else if (isUndo == false) {
           stepsArray.shift(stepsArray[0]);
           stepsArray.push("L");
         }
+        //console.log("final", stepsArray);
       }
     };
     var swapUp = function(rw, cl, arr) {
       if (rw + 1 != arr[0].length) {
         let str = "col" + (rw + 1) + cl;
         let temp = arr[rw + 1][cl];
-        //console.log("Value",temp,str,arr);
+        //console.log("Value", rw, cl, temp, str, arr);
         document.getElementById(str).innerHTML = arr[rw][cl];
         update(rw + 1, cl, arr[rw][cl], arr);
         str = "col" + rw + cl;
         document.getElementById(str).innerHTML = temp;
         update(rw, cl, temp, arr);
-        $scope.moves++;
-        if (stepsArray.length < 5) {
+        rw++;
+        if (stepsArray.length < 7 && isUndo == false) {
           stepsArray.push("U");
-        } else {
+        } else if (isUndo == false) {
           stepsArray.shift(stepsArray[0]);
           stepsArray.push("U");
         }
+        //console.log("final", stepsArray);
       }
     };
     var swapRight = function(rw, cl, arr) {
@@ -207,13 +210,14 @@ class HomeCtrl {
         str = "col" + rw + cl;
         document.getElementById(str).innerHTML = temp;
         update(rw, cl, temp, arr);
-        $scope.moves++;
-        if (stepsArray.length < 5) {
+        cl--;
+        if (stepsArray.length < 7 && isUndo == false) {
           stepsArray.push("R");
-        } else {
+        } else if (isUndo == false) {
           stepsArray.shift(stepsArray[0]);
           stepsArray.push("R");
         }
+        //console.log("final", stepsArray);
       }
     };
     var swapDown = function(rw, cl, arr) {
@@ -227,14 +231,14 @@ class HomeCtrl {
         document.getElementById(str).innerHTML = temp;
         //console.log("Value",temp,str,arr);
         update(rw, cl, temp, arr);
-        $scope.moves++;
-        if (stepsArray.length < 5) {
+        rw--;
+        if (stepsArray.length < 7 && isUndo == false) {
           stepsArray.push("D");
-        } else {
+        } else if (isUndo == false) {
           stepsArray.shift(stepsArray[0]);
           stepsArray.push("D");
         }
-        //console.log("final",arr);
+        //console.log("final", stepsArray);
       }
     };
     var alertt = function() {
@@ -246,7 +250,7 @@ class HomeCtrl {
     var checkIfSolved = function(arrChk) {
       //console.log(arrChk)
       let len = arrChk[0].length;
-      // console.log(len,arrChk,arrChk[0])
+      ////console.log(len,arrChk,arrChk[0])
       var checkArray = [];
       for (let i = 0; i < len; i++) {
         checkArray = checkArray.concat(arrChk[i]);
@@ -255,42 +259,46 @@ class HomeCtrl {
       checkArray.sort();
       if (JSON.stringify(checkArray) == JSON.stringify(checkFinal)) {
         alert("Congratulations!!! Puzzle Solved :-)");
+        clearInterval(myCounter);
+        const showTime = "" + $scope.hour + ":" + $scope.min + ":" + $scope.sec;
+        document
+          .getElementById("timerCount")
+          .setAttribute("style", "display:none");
+        document.getElementById("showTime").innerHTML = showTime;
       }
-      console.log("Check Array", checkArray, checkFinal);
+      //console.log("Check Array", checkArray, checkFinal);
     };
     /***END ***/
     /*** Undo Steps upto 7 moves***/
     var stepsArray = [];
-    $scope.undoSteps = function(arrUndo) {
+    $scope.undoSteps = function(arr) {
+      isUndo = true;
       let resetMove;
-      console.log("rw", rw, "cl", cl, "stepsArray", stepsArray);
-      console.log("DOM Array", arrUndo);
+      // console.log("rw", rw, "cl", cl, "stepsArray", stepsArray, isUndo);
+      // console.log("DOM Array", arr);
       if (stepsArray.length > 0) {
+        $scope.moves--;
         resetMove = stepsArray[stepsArray.length - 1];
         if (resetMove == "L") {
           stepsArray.pop();
-          var e = jQuery.Event("keydown", { keyCode: 39 });
-          jQuery("body").trigger(e);
-          //swapRight(rw, cl, arrUndo);
+          swapRight(rw, cl, $scope.arr);
+          cl--;
         } else if (resetMove == "U") {
           stepsArray.pop();
-          var e = jQuery.Event("keydown", { keyCode: 39 });
-          jQuery("body").trigger(e);
-          //swapDown(rw, cl, arrUndo);
+          swapDown(rw, cl, $scope.arr);
+          rw--;
         } else if (resetMove == "R") {
           stepsArray.pop();
-          var e = jQuery.Event("keydown", { keyCode: 37 });
-          jQuery("body").trigger(e);
-         // swapRight(rw, cl, arrUndo);
+          swapLeft(rw, cl, $scope.arr);
+          cl++;
         } else {
           stepsArray.pop();
-          var e = jQuery.Event("keydown", { keyCode: 38 });
-          jQuery("body").trigger(e);
-          //swapUp(rw, cl, arrUndo);
+          swapUp(rw, cl, $scope.arr);
+          rw++;
         }
-        stepsArray.pop();
-        console.log("stepsArray", stepsArray);
+        //console.log("stepsArray", stepsArray, isUndo);
       }
+      isUndo = false;
     };
     /***END ***/
   }
