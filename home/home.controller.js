@@ -161,7 +161,7 @@ class HomeCtrl {
     );
     /*** Left Up Right Down arrow functions configure according to the element near to the empty cell ***/
     var swapLeft = function(rw, cl, arr) {
-      if (cl + 1 != arr[0].length) {
+      // if (cl + 1 != arr[0].length) {
         let str = "col" + rw + (cl + 1);
         let temp = arr[rw][cl + 1];
         //console.log("Value",temp,str,arr);
@@ -178,10 +178,10 @@ class HomeCtrl {
           stepsArray.push("L");
         }
         //console.log("final", stepsArray);
-      }
+      // }
     };
     var swapUp = function(rw, cl, arr) {
-      if (rw + 1 != arr[0].length) {
+      //if (rw + 1 != arr[0].length) {
         let str = "col" + (rw + 1) + cl;
         let temp = arr[rw + 1][cl];
         //console.log("Value", rw, cl, temp, str, arr);
@@ -198,10 +198,10 @@ class HomeCtrl {
           stepsArray.push("U");
         }
         //console.log("final", stepsArray);
-      }
+      //}
     };
     var swapRight = function(rw, cl, arr) {
-      if (cl - 1 != -1) {
+     // if (cl - 1 != -1) {
         let str = "col" + rw + (cl - 1);
         let temp = arr[rw][cl - 1];
         //console.log("Value",temp,str,arr);
@@ -218,10 +218,10 @@ class HomeCtrl {
           stepsArray.push("R");
         }
         //console.log("final", stepsArray);
-      }
+     // }
     };
     var swapDown = function(rw, cl, arr) {
-      if (rw - 1 != -1) {
+      //if (rw - 1 != -1) {
         let str = "col" + (rw - 1) + cl;
         let temp = arr[rw - 1][cl];
         //console.log("Value",temp,str,arr);
@@ -239,7 +239,7 @@ class HomeCtrl {
           stepsArray.push("D");
         }
         //console.log("final", stepsArray);
-      }
+     // }
     };
     var alertt = function() {
       //Alert for all invalid move
