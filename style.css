@@ -16,8 +16,7 @@ h1, p {
   text-align:center;
 }
 .colElem{
-  top: 25%;
-  position: relative;
+  padding-top:15px;
 }
 .inline-block{
   display: inline-block;
@@ -28,7 +27,25 @@ h1, p {
   /* display: none; */
 }
 #inputCstm{
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 600;
+  display: none;
+}
+#inputCstm>form>input{
+  padding: 5px;
+  border-radius: 5%;
+  padding-bottom: 3px;
+}
+.timer{
+  float:right;
+  margin-right: 50px;
+  font-size: 25px;
+}
+#gridContainer>div>h6{
+  width:100px;
+  margin:0;
+  float: left;
+}
+#gridContainer{
   display: none;
 }

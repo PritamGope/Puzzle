@@ -1,84 +1,119 @@
 class HomeCtrl {
-  constructor($scope) {
+  constructor($scope, $interval) {
     "ngInject";
+    /*** Initialise Dom Variables and Global Declare Global Variables ***/
     var title = "Puzzle";
-    //this.name = "AngularJS";
-    var shuffle = function(originalArray) {
-      var array = [].concat(originalArray);
-      var currentIndex = array.length,
-        temporaryValue,
-        randomIndex;
+    $scope.val;
+    var rw;
+    var cl;
+    $scope.moves = 0;
+    $scope.hour = 0; //parseInt('00',8);
+    $scope.min = 0;
+    $scope.sec = 0;
 
-      // While there remain elements to shuffle...
-      while (0 !== currentIndex) {
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-      }
-
-      return array;
-    };
+    /*** End ***/
+    /*** Initialiseation of grid as 2D array, with random no b/w 1 to gril length ***/
     var array2D = [];
     $scope.cofigureGrid = function(len) {
-      console.log("VAL",len);
+      // len is the user input.
       let size = len * len;
       var arr1 = [];
       while (arr1.length < size - 1) {
+        // Generating random Numbers and push to the array.
         var r = Math.floor(Math.random() * size - 1) + 1;
         if (arr1.indexOf(r) === -1 && r != 0) arr1.push(r);
       }
       let indx = 0;
       arr1.push(null);
-      for (let i = 0; i < len; i++) {
-        array2D[i] = [];
-        for (let j = 0; j < len; j++) {
-          array2D[i][j] = arr1[indx++];
+      if (!checkSolvable(arr1)) {
+        //Check if Solveable
+        $scope.cofigureGrid(len);
+      } else {
+        for (let i = 0; i < len; i++) {
+          //Coverting 1D to 2D Array;
+          array2D[i] = [];
+          for (let j = 0; j < len; j++) {
+            array2D[i][j] = arr1[indx++];
+          }
         }
+        $scope.arr = array2D; // Setting view with numbers;
       }
-      console.log("Array Log", array2D);
       rw = len - 1;
       cl = len - 1;
-      $scope.arr = array2D;
       var cardWidth = "width:" + (len * 50 + 2) + "px";
-      document.getElementById("container").setAttribute("style", cardWidth);
+      document.getElementById("container").setAttribute("style", cardWidth); //setting card width according to the no of columns
       document
         .getElementById("hideButtons")
-        .setAttribute("style", "display:none");
+        .setAttribute("style", "display:none"); // Once grid appeare hiding all buttons.
+      document
+        .getElementById("gridContainer")
+        .setAttribute("style", "display:block");
+      $interval(myCounter, 1000); // Start Timer
     };
     $scope.reload = function() {
+      // Relode Function
       window.location.reload();
     };
-    $scope.val;
+    /*** Check If Puzzle is Solveable or Not  ***/
+    var checkSolvable = function(pList) {
+      //console.log("checkSolvable called with : " + pList);
+      var noOfSteps = 0;
 
-    $scope.setcofigureGrid = function( val) {
-      console.log(val)
-      if(val==undefined || val<3){
-        if(val<3){
-          alert("Number must be greater than 2 ");
+      for (let i = 0; i < pList.length; i++) {
+        for (let j = i + 1; j < pList.length; j++) {
+          if (pList[j] > pList[i]) {
+            noOfSteps++;
+          }
         }
-        document.getElementById("inputCstm").setAttribute("style","display:block");
-      }else{
-        $scope.cofigureGrid(val);
-        document.getElementById("inputCstm").setAttribute("style","display:none");
+      }
+      //console.log("Steps to solve", noOfSteps);
+      if (noOfSteps % 2 == 1) {
+        // console.log("It's Unsolvable");
+        return false;
+      } else {
+        //console.log("It's Solvable");
+        return true;
       }
     };
-
-    //console.log("Array Log",cofigureGrid(8));
-    var rw = 2;
-    var cl = 2;
-
-    // var arr = [[8, 6, 3], [7, 5, 1], [4, 2, null]];
-    // $scope.arr = arr;
+    /*** END ***/
+    /*** Set The Configuration Of Custom Grid ***/
+    $scope.setcofigureGrid = function() {
+      //Set the configuration of grid for custom selection.
+      if ($scope.val == undefined) {
+        document
+          .getElementById("inputCstm")
+          .setAttribute("style", "display:block");
+      } else if ($scope.val < 3) {
+        alert("Enter a valid Number");
+      } else {
+        $scope.cofigureGrid($scope.val);
+        document
+          .getElementById("inputCstm")
+          .setAttribute("style", "display:none");
+      }
+    };
+    /*** END ***/
+    /*** Timer Function ***/
+    var myCounter = function() {
+      ++$scope.sec;
+      if ($scope.sec == 60) {
+        $scope.sec = 0;
+        ++$scope.min;
+      }
+      if ($scope.min == 60) {
+        $scope.min = 0;
+        ++$scope.hour;
+      }
+    };
+    /*** END ***/
+    /*** After Each Move This Function will Update the DOM Array ***/
     var update = function(rw, cl, val, arr) {
       arr[rw][cl] = val;
+      setTimeout(1000);
+      checkIfSolved(arr);
     };
-    // $scope.arr[2][2]=null;
-
+    /*** END ***/
+    /*** Capturing the Keyboard Response ***/
     document.addEventListener(
       "keydown",
       function(event) {
@@ -123,7 +158,7 @@ class HomeCtrl {
       },
       true
     );
-
+    /*** Left Up Right Down arrow functions configure according to the element near to the empty cell ***/
     var swapLeft = function(rw, cl, arr) {
       if (cl + 1 != arr[0].length) {
         let str = "col" + rw + (cl + 1);
@@ -134,6 +169,13 @@ class HomeCtrl {
         str = "col" + rw + cl;
         document.getElementById(str).innerHTML = temp;
         update(rw, cl, temp, arr);
+        $scope.moves++;
+        if (stepsArray.length < 5) {
+          stepsArray.push("L");
+        } else {
+          stepsArray.shift(stepsArray[0]);
+          stepsArray.push("L");
+        }
       }
     };
     var swapUp = function(rw, cl, arr) {
@@ -146,6 +188,13 @@ class HomeCtrl {
         str = "col" + rw + cl;
         document.getElementById(str).innerHTML = temp;
         update(rw, cl, temp, arr);
+        $scope.moves++;
+        if (stepsArray.length < 5) {
+          stepsArray.push("U");
+        } else {
+          stepsArray.shift(stepsArray[0]);
+          stepsArray.push("U");
+        }
       }
     };
     var swapRight = function(rw, cl, arr) {
@@ -158,6 +207,13 @@ class HomeCtrl {
         str = "col" + rw + cl;
         document.getElementById(str).innerHTML = temp;
         update(rw, cl, temp, arr);
+        $scope.moves++;
+        if (stepsArray.length < 5) {
+          stepsArray.push("R");
+        } else {
+          stepsArray.shift(stepsArray[0]);
+          stepsArray.push("R");
+        }
       }
     };
     var swapDown = function(rw, cl, arr) {
@@ -171,13 +227,72 @@ class HomeCtrl {
         document.getElementById(str).innerHTML = temp;
         //console.log("Value",temp,str,arr);
         update(rw, cl, temp, arr);
+        $scope.moves++;
+        if (stepsArray.length < 5) {
+          stepsArray.push("D");
+        } else {
+          stepsArray.shift(stepsArray[0]);
+          stepsArray.push("D");
+        }
         //console.log("final",arr);
       }
     };
-
     var alertt = function() {
+      //Alert for all invalid move
       alert("Invalid Move");
     };
+    /*** END ***/
+    /*** Check if Puzzle Solved ***/
+    var checkIfSolved = function(arrChk) {
+      //console.log(arrChk)
+      let len = arrChk[0].length;
+      // console.log(len,arrChk,arrChk[0])
+      var checkArray = [];
+      for (let i = 0; i < len; i++) {
+        checkArray = checkArray.concat(arrChk[i]);
+      }
+      var checkFinal = checkArray.slice();
+      checkArray.sort();
+      if (JSON.stringify(checkArray) == JSON.stringify(checkFinal)) {
+        alert("Congratulations!!! Puzzle Solved :-)");
+      }
+      console.log("Check Array", checkArray, checkFinal);
+    };
+    /***END ***/
+    /*** Undo Steps upto 7 moves***/
+    var stepsArray = [];
+    $scope.undoSteps = function(arrUndo) {
+      let resetMove;
+      console.log("rw", rw, "cl", cl, "stepsArray", stepsArray);
+      console.log("DOM Array", arrUndo);
+      if (stepsArray.length > 0) {
+        resetMove = stepsArray[stepsArray.length - 1];
+        if (resetMove == "L") {
+          stepsArray.pop();
+          var e = jQuery.Event("keydown", { keyCode: 39 });
+          jQuery("body").trigger(e);
+          //swapRight(rw, cl, arrUndo);
+        } else if (resetMove == "U") {
+          stepsArray.pop();
+          var e = jQuery.Event("keydown", { keyCode: 39 });
+          jQuery("body").trigger(e);
+          //swapDown(rw, cl, arrUndo);
+        } else if (resetMove == "R") {
+          stepsArray.pop();
+          var e = jQuery.Event("keydown", { keyCode: 37 });
+          jQuery("body").trigger(e);
+         // swapRight(rw, cl, arrUndo);
+        } else {
+          stepsArray.pop();
+          var e = jQuery.Event("keydown", { keyCode: 38 });
+          jQuery("body").trigger(e);
+          //swapUp(rw, cl, arrUndo);
+        }
+        stepsArray.pop();
+        console.log("stepsArray", stepsArray);
+      }
+    };
+    /***END ***/
   }
 }
 
